@@ -1,0 +1,46 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #fff;
+  padding: 20px;
+}
+
+#contenedor-principal {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 250px;
+}
+
+.item {
+  padding: 10px;
+  border: 1px solid #aaa;
+  background: #eee;
+  cursor: pointer;
+}
+
+.item:hover {
+  background: #ddd;
+}
+
+.item.seleccionado {
+ border-radius: 10px;
+  border-color: #090;
+}
+
+.botones {
+  margin-top: 20px;
+}
+
+button {
+  padding: 8px 16px;
+  margin: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
