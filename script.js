@@ -9,16 +9,11 @@ let seleccionPersonaje = null;
 let parejasElegidas = [];
 
 function cargarFrases() {
-    const frasesitas = [];
-    for (let i=0; i<5; i++) {
-        frasesitas.push(fetch("https://thesimpsonsquoteapi.glitch.me/quotes").then(res => res.json()));
-    }
-
-Promise.all(frasesitas).then(resultados => {
-    datos = resultados.map(r => r[0]);
-    mostrarFrases();
-    mostrarPersonajes();
-});
+  fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=5").then(res => res.json()).then(resultados => {
+      datos = resultados;
+      mostrarFrases();
+      mostrarPersonajes();
+    });
 }
 
 function mostrarFrases() {
@@ -37,8 +32,6 @@ function mostrarFrases() {
   });
 }
 
-
-
 function mostrarPersonajes() {
   personajesDiv.innerHTML = "";
   const mezclados = [...datos].sort(() => Math.random() - 0.5);
@@ -46,6 +39,14 @@ function mostrarPersonajes() {
     const div = document.createElement("div");
     div.className = "item";
     div.textContent = item.character;
+
+    const img = document.createElement("img");
+    img.src = item.image;
+    img.alt = item.character;
+    img.className = "avatar";
+    
+    div.appendChild(img)
+    
     div.onclick = function () {
       deseleccionar(personajesDiv);
       div.classList.add("seleccionado");
@@ -56,19 +57,28 @@ function mostrarPersonajes() {
   });
 }
 
-
 function intentarEmparejar() {
   if (seleccionFrase !== null && seleccionPersonaje !== null) {
+    const fraseItems = frasesDiv.querySelectorAll(".item");
+    const personajeItems = personajesDiv.querySelectorAll(".item");
+
+    const fraseDiv = fraseItems[seleccionFrase];
+    const personajeDiv = personajeItems[seleccionPersonaje];
+
     const frase = datos[seleccionFrase].quote;
-    const personaje = personajesDiv.querySelectorAll(".item")[seleccionPersonaje].textContent;
+    const personaje = personajeDiv.textContent;
+
     parejasElegidas.push({ frase: frase, personaje: personaje });
+
+    fraseDiv.classList.add("emparejado");
+    fraseDiv.onclick = null;
+    personajeDiv.classList.add("emparejado");
+    personajeDiv.onclick = null;
+
     seleccionFrase = null;
     seleccionPersonaje = null;
-
   }
 }
-
-
 
 function deseleccionar(contenedor) {
   contenedor.querySelectorAll(".item").forEach(el => el.classList.remove("seleccionado"));
@@ -80,8 +90,8 @@ let mensaje = "";
 
   parejasElegidas.forEach(par => {
     const esCorrecto = datos.some(d => d.quote === par.frase && d.character === par.personaje);
+        if (esCorrecto) correctos++;
     mensaje += `\n"${par.frase}" - ${par.personaje} ${esCorrecto ? "✔" : "❌"}`;
-    if (esCorrecto) correctos++;
   });
 
   alert(`Acertaste ${correctos} de ${parejasElegidas.length}:\n${mensaje}`);
