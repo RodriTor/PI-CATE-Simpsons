@@ -34,7 +34,7 @@ function mostrarFrases() {
 
 function mostrarPersonajes() {
   personajesDiv.innerHTML = "";
-  const mezclados = [...datos].sort(() => Math.random() - 0.5);
+  const mezclados = [...datos].sort(() => Math.random() - 5);
   mezclados.forEach((item, index) => {
     const div = document.createElement("div");
     div.className = "item";
